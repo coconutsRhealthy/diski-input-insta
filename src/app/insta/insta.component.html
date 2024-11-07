@@ -57,6 +57,9 @@
             <button class="small-button" type="button" (click)="captureScreenshotFromTable()">Prtscrn</button>
           </div>
           <div>
+            split <input type="text" [(ngModel)]="splitOption" placeholder="Enter 1 or 2" />
+          </div>
+          <div>
             <button class="small-button" (click)="deleteRow()">Del line</button>
             <input type="text" [(ngModel)]="rowToDelete" style="margin-left: 5px; width: 32px;">
           </div>

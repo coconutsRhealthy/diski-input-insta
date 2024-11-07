@@ -57,6 +57,7 @@ export class InstaComponent {
   rgbGreen: number;
   rgbBlue: number;
   showRgbInputs: boolean = false;
+  splitOption;
 
   constructor() { }
 
@@ -162,6 +163,17 @@ export class InstaComponent {
 
     this.instaDiscountEntries = this.instaDiscountEntries.slice(0, parseInt(this.maxAmountForPost));
     this.addRowNumbers();
+
+    if(this.splitOption) {
+      this.sortTable();
+      const halfLength = Math.floor(this.instaDiscountEntries.length / 2);
+
+      if(this.splitOption === '1') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(0, halfLength);
+      } else if(this.splitOption === '2') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(halfLength);
+      }
+    }
   }
 
   getDateFromDateString(dateString) {
