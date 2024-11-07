@@ -1,0 +1,27 @@
+.client-action-button {
+  margin-top: 1%;
+}
+
+input[type="text"] {
+  font-size:8px;
+}
+
+.working-table-fill-in-field {
+  width: 100%;
+}
+
+.small-button {
+  heigth: 8px;
+  width: 75px;
+  font-size:8px;
+}
+
+.input-header {
+  font-size: 25px;
+  font-weight: 500;
+  color: grey;
+}
+
+.input-header-follow {
+  margin-top: 30px;
+}

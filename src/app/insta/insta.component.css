@@ -1,0 +1,47 @@
+table, th, td {
+  vertical-align: middle;
+}
+
+table {
+  counter-reset: row-num - 1;
+}
+
+table tr {
+  counter-increment: row-num;
+  border: yellow !important;
+}
+
+.smaller {
+  vertical-align: middle;
+  font-size:12px;
+}
+
+.table-outline {
+  height: 502px;
+  width: 502px;
+  border: 1px solid blue;
+}
+
+#insta-table thead th {
+  border-top: 0px solid;
+  border-bottom: 1.3px solid;
+}
+
+#insta-table tbody tr {
+  border-top: 0px solid !important;
+  border-bottom: 0px solid !important;
+}
+
+.small-button {
+  heigth: 8px;
+  width: 50px;
+  font-size:8px;
+}
+
+input {
+  font-size: 8px;
+}
+
+.last td {
+  padding-bottom: 45px !important;
+}

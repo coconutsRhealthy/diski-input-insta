@@ -1,0 +1,71 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6">
+      <button type="button" (click)="addAll()" class="btn btn-primary btn-sm">Add row</button>
+
+      <form [formGroup]="profileForm">
+        <div class="row">
+          <div class="col-10">
+            <div class="row">
+              <div class="col-3">
+                <div formArrayName="discount_companies">
+                  <div *ngFor="let company of discount_companies.controls; let i=index">
+                    <input class="working-table-fill-in-field" type="text" [formControlName]="i">
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div formArrayName="discount_codes">
+                  <div *ngFor="let code of discount_codes.controls; let i=index">
+                    <input class="working-table-fill-in-field" type="text" [formControlName]="i">
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div formArrayName="percentages">
+                  <div *ngFor="let percentage of percentages.controls; let i=index">
+                    <input class="working-table-fill-in-field" type="text" [formControlName]="i">
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div formArrayName="influencers">
+                  <div *ngFor="let influencer of influencers.controls; let i=index">
+                    <input class="working-table-fill-in-field" type="text" [formControlName]="i">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2">
+            <div *ngFor="let company of discount_companies.controls; let i=index">
+              <button class="small-button" type="button" (click)="deleteRow(i)">Delete</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="client-action-button" class="row">
+        <div class="col-12">
+          <button type="button" (click)="displayInput()" class="btn btn-primary btn-sm">Display input</button>
+        </div>
+        <div class="col-12">
+          <input type="checkbox" [(ngModel)]="isTiktokInput" (change)="toggleTiktokInput()">
+        </div>
+      </div>
+      <div *ngFor="let duplicate of multipleOccurrencesInData;">
+        {{duplicate}}
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="input-header">new</div>
+      <div *ngFor="let newInputLine of newInput;">
+        {{newInputLine}}
+      </div>
+
+      <div class="input-header-follow" class="input-header">duplicate</div>
+      <div *ngFor="let existingInputLine of existingInput;">
+        {{existingInputLine}}
+      </div>
+    </div>
+  </div>
+</div>

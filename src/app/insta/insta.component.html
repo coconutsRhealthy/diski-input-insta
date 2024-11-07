@@ -1,0 +1,119 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6">
+      <div>
+        startdate: <input type="text" [(ngModel)]="startDateForPostString">
+        max amount: <input type="text" [(ngModel)]="maxAmountForPost">
+      </div>
+      <div><button type="button" (click)="generateInstaPost()" class="btn btn-primary btn-sm">Generate post</button></div>
+
+      <div class="row">
+        <div class="col-12">
+          <div>
+            date: <input type="text" [(ngModel)]="kortingDate">
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="setTableBackgroundColour('#FDF8DC')">Yellow</button>
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="setTableBackgroundColour('#F6E7E7')">Pink</button>
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="setTableBackgroundColour('#EDE1FD')">Blue</button>
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="setTableBackgroundColour('#DAF5E8')">Green</button>
+          </div>
+          <div>
+            <span>
+              <button class="small-button" type="button" (click)="calculateAspectRatio()">asp ratio</button>
+            </span>
+            <span>
+              current aspect ratio: {{aspectRatio}}
+            </span>
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="defaultSizeTable()">default</button>
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="setAspectRatio('4:5')">4:5</button>
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="setAspectRatio('9:16')">9:16</button>
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="toggleTableLayout()">Toggle</button>
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="sortTable()">Sorteer</button>
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="toggleExtraBottomLine()">ExtraLine</button>
+          </div>
+          <div *ngIf="showExtraBottomLine">
+            <textarea [(ngModel)]="extraBottomLineValue" style="font-size: 9px;" rows="5"></textarea>
+          </div>
+          <div>
+            <button class="small-button" type="button" (click)="captureScreenshotFromTable()">Prtscrn</button>
+          </div>
+          <div>
+            <button class="small-button" (click)="deleteRow()">Del line</button>
+            <input type="text" [(ngModel)]="rowToDelete" style="margin-left: 5px; width: 32px;">
+          </div>
+          <div>
+            <button class="small-button" (click)="changeRowBackgroundColor()" style="margin-right: 5px;">Set rgb</button>
+            <input *ngIf="showRgbInputs" type="text" [(ngModel)]="selectedRowToChangeColour" style="margin-right: 5px; width: 32px;" placeholder="#">
+            <input *ngIf="showRgbInputs" type="text" [(ngModel)]="rgbRed" style="margin-right: 5px; width: 32px;" placeholder="R">
+            <input *ngIf="showRgbInputs" type="text" [(ngModel)]="rgbGreen" style="margin-right: 5px; width: 32px;" placeholder="G">
+            <input *ngIf="showRgbInputs" type="text" [(ngModel)]="rgbBlue" style="margin-right: 5px; width: 32px;" placeholder="B">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div *ngFor="let entry of instaDiscountEntries" style="font-size:9px;">
+            {{entry.date}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="table-outline">
+        <table id="insta-table" class="table table-dark" [ngStyle]="{
+            'height.px' : tableHeight,
+            'width.px' : tableWidth,
+            'font-size.px' : tableFontSize,
+            'color' : tableLineAndFontColor,
+            'background-color' : tableBackgroundColor
+            }">
+          <thead>
+            <tr>
+              <th (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color' : tableLineAndFontColor, 'font-size.px' : kortingDateFontSize, 'padding-left' : tablePaddingLeft, 'padding-top' : tablePaddingTop }" scope="col">{{kortingDate}}</th>
+              <th (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color' : tableLineAndFontColor, 'font-size.px' : headerFontSize, 'padding-top' : tablePaddingTop }" scope="col">Je krijgt korting bij</th>
+              <th (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color' : tableLineAndFontColor, 'font-size.px' : headerFontSize, 'padding-right' : tablePaddingRight, 'padding-top' : tablePaddingTop  }" scope="col" class="tablePaddingTop">Met code</th>
+              <th (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color' : tableLineAndFontColor, 'font-size.px' : headerFontSize, 'padding-right' : tablePaddingRight, 'padding-top' : tablePaddingTop  }" scope="col">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of instaDiscountEntries; let i = index" [ngStyle]="rowStyles">
+              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-left' : tablePaddingLeft }">{{ entry.rowNumber }}</td>
+              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize }">{{entry.company.startsWith('temu') ? 'temu*' : entry.company}}</td>
+              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-right' : tablePaddingRight }">{{entry.code}}</td>
+              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-right' : tablePaddingRight }">{{entry.percentage}}</td>
+            </tr>
+            <tr *ngIf="showExtraBottomLine" class="no-counter" [ngStyle]="rowStyles">
+              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" colspan="4" [ngStyle]="{'border-color' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-right' : tablePaddingRight, 'text-align' : 'center' }">{{extraBottomLineValue}}</td>
+            </tr>
+            <tr *ngIf="showExtraBottomLine" class="no-counter" [ngStyle]="rowStyles">
+              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" colspan="4" [ngStyle]="{'border-color' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-right' : tablePaddingRight, 'text-align' : 'center' }">{{giftCardBottomLineValue}}</td>
+            </tr>
+            <tr class="no-counter" [ngClass]="{ last : tiktokSize }" [ngStyle]="rowStyles">
+              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" colspan="4" [ngStyle]="{'border-color' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-right' : tablePaddingRight, 'text-align' : 'center' }">google 'diski kortingscode' voor meer codes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
