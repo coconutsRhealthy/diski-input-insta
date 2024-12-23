@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { DataDirective } from './data/data.directive';
+import { DataDirective } from './data/data-input-insta.directive';
 import { InputComponent } from './input-page/input-page.component';
 import { InstaComponent } from './insta/insta.component';
 

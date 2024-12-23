@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { FormArray } from '@angular/forms';
 
-import { DataDirective } from '../data/data.directive';
+import { DataDirective } from '../data/data-input-insta.directive';
 
 @Component({
   selector: 'input-page',
