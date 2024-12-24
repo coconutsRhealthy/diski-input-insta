@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 
 import { Component } from '@angular/core';
 
-import { DataDirective } from '../data/data-input-insta.directive';
+import { DiscountsService } from '../services/discounts.service';
 
 import {firstBy} from "thenby";
 
@@ -59,7 +59,7 @@ export class InstaComponent {
   showRgbInputs: boolean = false;
   splitOption;
 
-  constructor() { }
+  constructor(private discountsService: DiscountsService) { }
 
   setTableBackgroundColour(hex) {
     this.tableBackgroundColor = hex;
@@ -135,52 +135,59 @@ export class InstaComponent {
   }
 
   generateInstaPost() {
-    this.instaDiscountEntries = [];
-    var baseData = DataDirective.getDataArray();
-    var baseKortingEntries = [];
+    this.discountsService.getDiscounts().subscribe((data) => {
+      var baseData = [];
 
-    for(var i = 0; i < baseData.length; i++) {
-      baseKortingEntries.push(baseData[i]);
-    }
+      data.forEach((line: string) => {
+        baseData.push(line);
+      });
 
-    baseKortingEntries.reverse();
-    var startDate = this.getDateFromDateString(this.startDateForPostString);
+      this.instaDiscountEntries = [];
+      var baseKortingEntries = [];
 
-    for(var i = 0; i < baseKortingEntries.length; i++) {
-      var dateString = this.getDateFromBaseInputLine(baseKortingEntries[i]);
-      var date = this.getDateFromDateString(dateString);
-
-      if(date >= startDate) {
-        this.instaDiscountEntries.push({
-           "company": this.getCompanyFromBaseInputLine(baseKortingEntries[i]),
-           "code": this.getDiscountCodeFromBaseInputLine(baseKortingEntries[i]),
-           "via": this.getInfluencerFromBaseInputLine(baseKortingEntries[i]),
-           "percentage": this.getDiscountPercentageFromBaseInputLine(baseKortingEntries[i]),
-           "tracker": i,
-           });
+      for(var i = 0; i < baseData.length; i++) {
+        baseKortingEntries.push(baseData[i]);
       }
-    }
 
-    this.instaDiscountEntries = this.instaDiscountEntries.slice(0, parseInt(this.maxAmountForPost));
-    this.addRowNumbers();
+      baseKortingEntries.reverse();
+      var startDate = this.getDateFromDateString(this.startDateForPostString);
 
-    if(this.splitOption) {
-      this.sortTable();
-      const halfLength = Math.floor(this.instaDiscountEntries.length / 2);
-      const oneThirdLength = Math.floor(this.instaDiscountEntries.length / 3);
+      for(var i = 0; i < baseKortingEntries.length; i++) {
+        var dateString = this.getDateFromBaseInputLine(baseKortingEntries[i]);
+        var date = this.getDateFromDateString(dateString);
 
-      if(this.splitOption === '1') {
-          this.instaDiscountEntries = this.instaDiscountEntries.slice(0, halfLength);
-      } else if(this.splitOption === '2') {
-          this.instaDiscountEntries = this.instaDiscountEntries.slice(halfLength);
-      } else if (this.splitOption === '3.1') {
-          this.instaDiscountEntries = this.instaDiscountEntries.slice(0, oneThirdLength);
-      } else if (this.splitOption === '3.2') {
-          this.instaDiscountEntries = this.instaDiscountEntries.slice(oneThirdLength, oneThirdLength * 2);
-      } else if (this.splitOption === '3.3') {
-          this.instaDiscountEntries = this.instaDiscountEntries.slice(oneThirdLength * 2);
+        if(date >= startDate) {
+          this.instaDiscountEntries.push({
+             "company": this.getCompanyFromBaseInputLine(baseKortingEntries[i]),
+             "code": this.getDiscountCodeFromBaseInputLine(baseKortingEntries[i]),
+             "via": this.getInfluencerFromBaseInputLine(baseKortingEntries[i]),
+             "percentage": this.getDiscountPercentageFromBaseInputLine(baseKortingEntries[i]),
+             "tracker": i,
+             });
+        }
       }
-    }
+
+      this.instaDiscountEntries = this.instaDiscountEntries.slice(0, parseInt(this.maxAmountForPost));
+      this.addRowNumbers();
+
+      if(this.splitOption) {
+        this.sortTable();
+        const halfLength = Math.floor(this.instaDiscountEntries.length / 2);
+        const oneThirdLength = Math.floor(this.instaDiscountEntries.length / 3);
+
+        if(this.splitOption === '1') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(0, halfLength);
+        } else if(this.splitOption === '2') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(halfLength);
+        } else if (this.splitOption === '3.1') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(0, oneThirdLength);
+        } else if (this.splitOption === '3.2') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(oneThirdLength, oneThirdLength * 2);
+        } else if (this.splitOption === '3.3') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(oneThirdLength * 2);
+        }
+      }
+    });
   }
 
   getDateFromDateString(dateString) {
@@ -193,27 +200,27 @@ export class InstaComponent {
   }
 
   getCompanyFromBaseInputLine(baseInputLine) {
-    return DataDirective.getCompanyFromBaseInputLine(baseInputLine);
+    return this.discountsService.getCompanyFromBaseInputLine(baseInputLine);
   }
 
   getDiscountCodeFromBaseInputLine(baseInputLine) {
-    return DataDirective.getDiscountCodeFromBaseInputLine(baseInputLine);
+    return this.discountsService.getDiscountCodeFromBaseInputLine(baseInputLine);
   }
 
   getInfluencerFromBaseInputLine(baseInputLine) {
-    return DataDirective.getInfluencerFromBaseInputLine(baseInputLine);
+    return this.discountsService.getInfluencerFromBaseInputLine(baseInputLine);
   }
 
   getDateFromBaseInputLine(baseInputLine) {
-    return DataDirective.getDateFromBaseInputLine(baseInputLine);
+    return this.discountsService.getDateFromBaseInputLine(baseInputLine);
   }
 
   getPosition(string, subString, index) {
-    return DataDirective.getPosition(string, subString, index);
+    return this.discountsService.getPosition(string, subString, index);
   }
 
   getDiscountPercentageFromBaseInputLine(baseInputLine) {
-    return DataDirective.getDiscountPercentageFromBaseInputLine(baseInputLine);
+    return this.discountsService.getDiscountPercentageFromBaseInputLine(baseInputLine);
   }
 
   sortTable() {

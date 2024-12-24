@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { FormArray } from '@angular/forms';
 
-import { DataDirective } from '../data/data-input-insta.directive';
+import { DiscountsService } from '../services/discounts.service';
 
 @Component({
   selector: 'input-page',
@@ -17,7 +17,7 @@ export class InputComponent implements OnInit {
   multipleOccurrencesInData = [];
   isTiktokInput = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private discountsService: DiscountsService) {
 
   }
 
@@ -118,7 +118,6 @@ export class InputComponent implements OnInit {
     this.percentages.removeAt(index);
   }
 
-  //tot hier...
   displayInput() {
     this.existingInput = [];
     this.newInput = [];
@@ -128,32 +127,51 @@ export class InputComponent implements OnInit {
     var codes = this.profileForm.get('discount_codes') as FormArray;
     var percentages = this.profileForm.get('percentages') as FormArray;
 
-    var existing = this.getExistingCodesWithoutDateAndPercentage();
+    var existing = [];
+    var existingCodeEntries = [];
 
-    for(var i = 0; i < influencers.length; i++) {
-      var company = companies.at(i).value.replace(/\s/g, "");
-      var code = codes.at(i).value.replace(/\s/g, "");
-      var percentage = percentages.at(i).value.replace(/\s/g, "");
-      var influencer = influencers.at(i).value.replace(/\s/g, "");
-      var fullNewCodeEntryNoPercentage = company + ", " + code + ", " + influencer;
-      var fullNewCodeEntry = company + ", " + code + ", " + percentage + ", " + influencer;
-      var isExistingInput = false;
+    this.discountsService.getDiscounts().subscribe((data) => {
+      data.forEach((line: string) => {
+        existingCodeEntries.push(line);
+      });
 
-      if(this.includesIgnoreCase(fullNewCodeEntryNoPercentage, existing)) {
-        if(!this.includesIgnoreCase(fullNewCodeEntry, this.existingInput)) {
-          this.existingInput.push("\"" + fullNewCodeEntryNoPercentage + ", " + this.getDateOfAlreadyExistingInput(fullNewCodeEntryNoPercentage) + "\",");
-          this.newInput.push("\"..." + fullNewCodeEntry + ", " + this.getDate() + "\",");
-          isExistingInput = true;
-        }
-      } else {
-        if(!this.includesIgnoreCase(fullNewCodeEntry, this.newInput)) {
-          this.newInput.push("\"" + fullNewCodeEntry + ", " + this.getDate() + "\",");
+      var existingCodesNoDateAndPercentages = [];
+
+      for(var i = 0; i < existingCodeEntries.length; i++) {
+        var lineWithoutDateAndPercentage = this.removeDateAndPercentageFromBaseCodeEntry(existingCodeEntries[i]);
+
+        if(lineWithoutDateAndPercentage.replace(/\s/g, '').length) {
+          existingCodesNoDateAndPercentages.push(lineWithoutDateAndPercentage);
         }
       }
-    }
 
-    this.existingInput.reverse();
-    this.newInput.reverse();
+      existing = existingCodesNoDateAndPercentages;
+
+      for(var i = 0; i < influencers.length; i++) {
+        var company = companies.at(i).value.replace(/\s/g, "");
+        var code = codes.at(i).value.replace(/\s/g, "");
+        var percentage = percentages.at(i).value.replace(/\s/g, "");
+        var influencer = influencers.at(i).value.replace(/\s/g, "");
+        var fullNewCodeEntryNoPercentage = company + ", " + code + ", " + influencer;
+        var fullNewCodeEntry = company + ", " + code + ", " + percentage + ", " + influencer;
+        var isExistingInput = false;
+
+        if(this.includesIgnoreCase(fullNewCodeEntryNoPercentage, existing)) {
+          if(!this.includesIgnoreCase(fullNewCodeEntry, this.existingInput)) {
+            this.existingInput.push("\"" + fullNewCodeEntryNoPercentage + ", " + this.getDateOfAlreadyExistingInput(fullNewCodeEntryNoPercentage, existingCodeEntries) + "\",");
+            this.newInput.push("\"..." + fullNewCodeEntry + ", " + this.getDate() + "\",");
+            isExistingInput = true;
+          }
+        } else {
+          if(!this.includesIgnoreCase(fullNewCodeEntry, this.newInput)) {
+            this.newInput.push("\"" + fullNewCodeEntry + ", " + this.getDate() + "\",");
+          }
+        }
+      }
+
+      this.existingInput.reverse();
+      this.newInput.reverse();
+    });
   }
 
   stringInArrayContainsStringPart(stringPart, array) {
@@ -171,24 +189,8 @@ export class InputComponent implements OnInit {
     return dummyFilterArray.length > 0;
   }
 
-  getExistingCodesWithoutDateAndPercentage() {
-    var existingCodeEntries = DataDirective.getDataArray();
-    var existingCodesNoDateAndPercentages = [];
-
-    for(var i = 0; i < existingCodeEntries.length; i++) {
-      var lineWithoutDateAndPercentage = this.removeDateAndPercentageFromBaseCodeEntry(existingCodeEntries[i]);
-
-      if(lineWithoutDateAndPercentage.replace(/\s/g, '').length) {
-        existingCodesNoDateAndPercentages.push(lineWithoutDateAndPercentage);
-      }
-    }
-
-    return existingCodesNoDateAndPercentages;
-  }
-
-  getDateOfAlreadyExistingInput(inputThatAlreadyExists) {
+  getDateOfAlreadyExistingInput(inputThatAlreadyExists, existingCodeEntries) {
     var dateOfExistingInputEntry = "?";
-    var existingCodeEntries = DataDirective.getDataArray();
 
     for(var i = 0; i < existingCodeEntries.length; i++) {
       if(dateOfExistingInputEntry === "?") {

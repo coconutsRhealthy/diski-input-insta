@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { DataDirective } from './data/data-input-insta.directive';
 import { InputComponent } from './input-page/input-page.component';
 import { InstaComponent } from './insta/insta.component';
 
@@ -23,7 +23,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    DataDirective,
     InstaComponent,
     InputComponent
   ],
@@ -31,6 +30,7 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     RouterModule.forRoot(routes)
   ],
   providers: [],
