@@ -48,7 +48,7 @@ export class InstaComponent {
   };
 
   showExtraBottomLine = true;
-  extraBottomLineValue = "*download Temu app via link in bio en ontvang €100 shoptegoed en 30% korting";
+  extraBottomLineValue = "*download Temu app via link in bio en ontvang €200 shoptegoed en 30% korting";
   giftCardBottomLineValue = "**€7.50 gift cards voor heel veel shops! (o.a. zalando, myjewellery) Zie link in bio";
   isEditing: boolean = false;
   rowToDelete: number = 0;
@@ -78,7 +78,7 @@ export class InstaComponent {
 
       var desiredTiktokTableHeight = ((tableWidth / 9) * 16);
       this.tableHeight = desiredTiktokTableHeight;
-      this.extraBottomLineValue = "*download Temu app via link in bio voor €100 shoptegoed en 30% off";
+      this.extraBottomLineValue = "*download Temu app via link in bio voor €200 shoptegoed en 30% off";
     } else {
       this.tablePaddingLeft = "12px";
       this.tablePaddingTop = "12px";
@@ -86,7 +86,7 @@ export class InstaComponent {
 
       this.tableWidth = 500;
       this.tableHeight = 500;
-      this.extraBottomLineValue = "*download Temu app via link in bio en ontvang €100 shoptegoed en 30% korting";
+      this.extraBottomLineValue = "*download Temu app via link in bio en ontvang €200 shoptegoed en 30% korting";
     }
   }
 
@@ -190,13 +190,22 @@ export class InstaComponent {
     });
   }
 
-  getDateFromDateString(dateString) {
-    dateString = dateString + "";
-    var dateStringArray = dateString.split("-");
-    var month = dateStringArray[0];
-    month = month - 1;
-    var day = dateStringArray[1];
-    return new Date(new Date().getFullYear(), month, day);
+  getDateFromDateString(dateString: string): Date {
+      const [monthStr, dayStr] = dateString.split("-");
+      const month = parseInt(monthStr, 10) - 1;
+      const day = parseInt(dayStr, 10);
+
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+
+      let year = currentYear;
+
+      if (month > currentMonth + 2) {
+          year -= 1;
+      }
+
+      return new Date(year, month, day);
   }
 
   getCompanyFromBaseInputLine(baseInputLine) {
