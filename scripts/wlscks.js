@@ -49,9 +49,15 @@ fs.readFile(jsonFilePath, 'utf8', (err, data) => {
     // Split the txtData into lines
     const txtLines = txtData.split('\n').map(line => line.trim()).filter(line => line.length > 0);
 
-    // Add these lines to the array of the most recent date
-    if (sortedDates.length > 0) {
-      dateGroups[sortedDates[0]].push(...txtLines);
+    // Split the lines into two parts (no shuffle needed)
+    const midIndex = Math.floor(txtLines.length / 2);
+    const firstHalf = txtLines.slice(0, midIndex);  // Lines for the most recent date
+    const secondHalf = txtLines.slice(midIndex);   // Lines for the second most recent date
+
+    // Add the lines to the most recent and second most recent date arrays
+    if (sortedDates.length > 1) {
+      dateGroups[sortedDates[0]].push(...firstHalf);
+      dateGroups[sortedDates[1]].push(...secondHalf);
     }
 
     // Log the result
