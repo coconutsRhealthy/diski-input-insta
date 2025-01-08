@@ -1,13 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-// Define the relative path to the JSON file from the script's location
+// Define the relative paths to the files
 const jsonFilePath = path.join(__dirname, '../src/assets/eije.json');
+const txtFilePath = path.join(__dirname, '../src/assets/wlscks.txt');
 
 // Read the JSON file
 fs.readFile(jsonFilePath, 'utf8', (err, data) => {
   if (err) {
-    console.error('Error reading the file:', err);
+    console.error('Error reading the JSON file:', err);
     return;
   }
 
@@ -38,12 +39,22 @@ fs.readFile(jsonFilePath, 'utf8', (err, data) => {
     return dayB - dayA; // If months are the same, sort by day
   });
 
-  // Add "zzz" to the arrays of the two most recent dates
-  if (sortedDates.length > 1) {
-    dateGroups[sortedDates[0]].push("zzz");
-    dateGroups[sortedDates[1]].push("zzz");
-  }
+  // Read the wlscks.txt file and add the lines to the most recent date's array
+  fs.readFile(txtFilePath, 'utf8', (err, txtData) => {
+    if (err) {
+      console.error('Error reading the wlscks.txt file:', err);
+      return;
+    }
 
-  // Log the result
-  console.log(dateGroups);
+    // Split the txtData into lines
+    const txtLines = txtData.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+
+    // Add these lines to the array of the most recent date
+    if (sortedDates.length > 0) {
+      dateGroups[sortedDates[0]].push(...txtLines);
+    }
+
+    // Log the result
+    console.log(dateGroups);
+  });
 });
