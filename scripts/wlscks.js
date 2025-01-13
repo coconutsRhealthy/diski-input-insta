@@ -1,66 +1,71 @@
 const fs = require('fs');
 const path = require('path');
 
-// Define the relative paths to the files
-const jsonFilePath = path.join(__dirname, '../src/assets/eije.json');
-const txtFilePath = path.join(__dirname, '../src/assets/wlscks.txt');
+const sjaaksonPath = path.join(__dirname, '../src/assets/sjaakson.json');
+const wlscksPath = path.join(__dirname, '../src/assets/wlscks.txt');
+const updatedArraysPath = path.join(__dirname, '../src/assets/updatedArrays.json');
 
 // Read the JSON file
-fs.readFile(jsonFilePath, 'utf8', (err, data) => {
+fs.readFile(sjaaksonPath, 'utf8', (err, data) => {
   if (err) {
-    console.error('Error reading the JSON file:', err);
+    console.error('Error reading sjaakson.json:', err);
     return;
   }
 
-  // Parse the JSON data into an array
-  const lines = JSON.parse(data);
+  // Split the JSON data into groups, removing any blank lines
+  const lines = data.split('\n').filter(line => line.trim() !== '');
+  const arrays = [];
 
-  // Object to hold arrays for each date
-  const dateGroups = {};
-
-  // Iterate over each line and group them by date
-  lines.forEach(line => {
-    const parts = line.split(', ');
-    const date = parts[parts.length - 1]; // The last part is the date
-    if (!dateGroups[date]) {
-      dateGroups[date] = [];
+  // Group lines into 5 arrays
+  let group = [];
+  lines.forEach((line, index) => {
+    if (index % 3 === 0 && group.length > 0) {
+      arrays.push(group);
+      group = [];
     }
-    dateGroups[date].push(line);
+    group.push(line);
   });
+  if (group.length > 0) {
+    arrays.push(group); // Push the last group
+  }
 
-  // Get all the dates and sort them in descending order
-  const sortedDates = Object.keys(dateGroups).sort((a, b) => {
-    const [dayA, monthA] = a.split('-').map(num => parseInt(num, 10));
-    const [dayB, monthB] = b.split('-').map(num => parseInt(num, 10));
+  console.log('Initial arrays:', arrays);
 
-    if (monthA !== monthB) {
-      return monthB - monthA; // Sort by month
-    }
-    return dayB - dayA; // If months are the same, sort by day
-  });
-
-  // Read the wlscks.txt file and add the lines to the most recent date's array
-  fs.readFile(txtFilePath, 'utf8', (err, txtData) => {
+  // Read the wlscks.txt file
+  fs.readFile(wlscksPath, 'utf8', (err, wlscksData) => {
     if (err) {
-      console.error('Error reading the wlscks.txt file:', err);
+      console.error('Error reading wlscks.txt:', err);
       return;
     }
 
-    // Split the txtData into lines
-    const txtLines = txtData.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+    const wlscksLines = wlscksData.split('\n').filter(line => line.trim() !== '');
 
-    // Split the lines into two parts (no shuffle needed)
-    const midIndex = Math.floor(txtLines.length / 2);
-    const firstHalf = txtLines.slice(0, midIndex);  // Lines for the most recent date
-    const secondHalf = txtLines.slice(midIndex);   // Lines for the second most recent date
+    // Randomly assign wlscks lines to the first three arrays
+    wlscksLines.forEach((line, index) => {
+      const arrayIndex = Math.floor(Math.random() * 3); // Randomly select 0, 1, or 2
+      arrays[arrayIndex].push(line);
+    });
 
-    // Add the lines to the most recent and second most recent date arrays
-    if (sortedDates.length > 1) {
-      dateGroups[sortedDates[0]].push(...firstHalf);
-      dateGroups[sortedDates[1]].push(...secondHalf);
-    }
+    console.log('Updated arrays with wlscks lines:', arrays);
 
-    // Log the result
-    console.log(dateGroups);
+        // Flatten all arrays and join them into a single string
+        //const outputContent = arrays.flat().join('\n');
+
+            let outputContent = '';
+            arrays.forEach((array, index) => {
+              outputContent += array.join('\n') + '\n'; // Join lines in the array with a newline
+              if (index < arrays.length - 1) {
+                outputContent += '\n'; // Add a blank line between arrays
+              }
+            });
+
+        // Write the content to a new file
+        fs.writeFile(updatedArraysPath, outputContent, (err) => {
+          if (err) {
+            console.error('Error saving updated arrays:', err);
+          } else {
+            console.log('Updated arrays saved to updatedArrays.txt');
+          }
+        });
   });
 });
