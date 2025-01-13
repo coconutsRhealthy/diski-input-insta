@@ -47,7 +47,7 @@ fs.readFile(sjaaksonPath, 'utf8', (err, data) => {
 
     // Randomly assign wlscks lines to the first three arrays
     wlscksLines.forEach((line, index) => {
-      const arrayIndex = Math.floor(Math.random() * 3); // Randomly select 0, 1, or 2
+      const arrayIndex = Math.floor(index / 5); // Calculate which array to assign the line to
 
       const targetArray = arrays[arrayIndex];
 
