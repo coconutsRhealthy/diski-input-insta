@@ -48,7 +48,26 @@ fs.readFile(sjaaksonPath, 'utf8', (err, data) => {
     // Randomly assign wlscks lines to the first three arrays
     wlscksLines.forEach((line, index) => {
       const arrayIndex = Math.floor(Math.random() * 3); // Randomly select 0, 1, or 2
-      arrays[arrayIndex].push(line);
+
+      const targetArray = arrays[arrayIndex];
+
+      if (targetArray.length > 0) {
+        // Extract the part after the second-to-last comma from the first element of the target array
+        const secondElement = targetArray[1];
+        const parts = secondElement.split(',');
+        const secondToLastPart = parts.length >= 2 ? parts[parts.length - 2].trim() : '';
+
+        // Replace the part after the second-to-last comma in the current line
+        const lineParts = line.split(',');
+        if (lineParts.length >= 2) {
+          lineParts[lineParts.length - 2] = ' ' + secondToLastPart;
+        }
+        const updatedLine = lineParts.join(',');
+        targetArray.push(updatedLine);
+      } else {
+        // If the target array is empty, add the line without modification
+        targetArray.push(line);
+      }
     });
 
     console.log('Updated arrays with wlscks lines:', arrays);
