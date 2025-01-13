@@ -12,21 +12,26 @@ fs.readFile(sjaaksonPath, 'utf8', (err, data) => {
     return;
   }
 
-  // Split the JSON data into groups, removing any blank lines
-  const lines = data.split('\n').filter(line => line.trim() !== '');
+  // Split the file into lines
+  const lines = data.split('\n').map(line => line.trim());
   const arrays = [];
-
-  // Group lines into 5 arrays
   let group = [];
-  lines.forEach((line, index) => {
-    if (index % 3 === 0 && group.length > 0) {
-      arrays.push(group);
-      group = [];
+
+  // Group lines based on blank lines
+  lines.forEach(line => {
+    if (line === '') {
+      if (group.length > 0) {
+        arrays.push(group);
+        group = [];
+      }
+    } else {
+      group.push(line);
     }
-    group.push(line);
   });
+
+  // Add the last group if it exists
   if (group.length > 0) {
-    arrays.push(group); // Push the last group
+    arrays.push(group);
   }
 
   console.log('Initial arrays:', arrays);
