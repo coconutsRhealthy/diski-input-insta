@@ -25,7 +25,7 @@ fs.readFile(sjaaksonPath, 'utf8', (err, data) => {
         group = [];
       }
     } else {
-      group.push(line);
+      group.push(line === '[' || line === ']' ? line : '  ' + line);
     }
   });
 
@@ -43,7 +43,7 @@ fs.readFile(sjaaksonPath, 'utf8', (err, data) => {
       return;
     }
 
-    const wlscksLines = wlscksData.split('\n').filter(line => line.trim() !== '');
+    const wlscksLines = wlscksData.split('\n').filter(line => line.trim() !== '').map(line => '  ' + line);
 
     // Randomly assign wlscks lines to the first three arrays
     wlscksLines.forEach((line, index) => {
