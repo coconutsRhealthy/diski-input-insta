@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const sjaaksonPath = path.join(__dirname, '../src/assets/sjaakson.json');
+const sjaaksonPath = path.join(__dirname, '../src/assets/sjaakson2.json');
 const wlscksPath = path.join(__dirname, '../src/assets/wlscks.txt');
 const updatedArraysPath = path.join(__dirname, '../src/assets/updatedArrays.json');
 
@@ -63,7 +63,12 @@ fs.readFile(sjaaksonPath, 'utf8', (err, data) => {
           lineParts[lineParts.length - 2] = ' ' + secondToLastPart;
         }
         const updatedLine = lineParts.join(',');
-        targetArray.push(updatedLine);
+
+        // Randomly place in the bottom half of the array
+        const startIndex = Math.floor(targetArray.length / 2);
+        const randomIndex = Math.floor(Math.random() * (targetArray.length - startIndex)) + startIndex;
+
+        targetArray.splice(randomIndex, 0, updatedLine); // Insert line at the random position
       } else {
         // If the target array is empty, add the line without modification
         targetArray.push(line);
