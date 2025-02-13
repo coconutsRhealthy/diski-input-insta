@@ -31,8 +31,8 @@ fs.readFile(discountsPath, 'utf8', (err, data) => {
     wlscksLines.forEach((line, index) => {
       const arrayIndex = Math.floor(index / 5);
       const targetArray = arrays[arrayIndex];
-      const secondElement = targetArray[1];
-      const parts = secondElement.split(',');
+      const elementToGetDateFrom = targetArray.length > 1 ? targetArray[1] : targetArray[0];
+      const parts = elementToGetDateFrom.split(',');
       const secondToLastPart = parts.length >= 2 ? parts[parts.length - 2].trim() : '';
 
       const lineParts = line.split(',');
