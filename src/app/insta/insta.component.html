@@ -102,11 +102,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let entry of instaDiscountEntries; let i = index" [ngStyle]="rowStyles">
-              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-left' : tablePaddingLeft }">{{ entry.rowNumber }}</td>
-              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize }">{{entry.company.startsWith('temu') ? 'temu*' : entry.company}}</td>
-              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-right' : tablePaddingRight }">{{entry.code}}</td>
-              <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-right' : tablePaddingRight }">{{entry.percentage}}</td>
+            <tr *ngFor="let entry of instaDiscountEntries; let i = index;" [ngStyle]="rowStyles">
+              <ng-container *ngIf="i >= instaDiscountEntries.length - 2; else normalRow">
+                <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-left' : tablePaddingLeft }">{{ entry.rowNumber }}</td>
+                <td colspan="3" (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px': bodyFontSize}">
+                  testtext
+                </td>
+              </ng-container>
+              <ng-template #normalRow>
+                <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-left' : tablePaddingLeft }">{{ entry.rowNumber }}</td>
+                <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize }">{{entry.company.startsWith('temu') ? 'temu*' : entry.company}}</td>
+                <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-right' : tablePaddingRight }">{{entry.code}}</td>
+                <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" [ngStyle]="{'border-color': i === 0 ? 'rgb(153, 52, 48)' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-right' : tablePaddingRight }">{{entry.percentage}}</td>
+              </ng-template>
             </tr>
             <tr *ngIf="showExtraBottomLine" class="no-counter" [ngStyle]="rowStyles">
               <td (dblclick)="editCellContent($event)" [contentEditable]="isEditing" colspan="4" [ngStyle]="{'border-color' : 'rgb(152, 152, 152)', 'font-size.px' : bodyFontSize, 'padding-right' : tablePaddingRight, 'text-align' : 'center' }">{{extraBottomLineValue}}</td>

@@ -49,7 +49,7 @@ export class InstaComponent {
 
   showExtraBottomLine = true;
   extraBottomLineValue = "*download Temu app via link in bio en ontvang €200 shoptegoed en 30% korting";
-  giftCardBottomLineValue = "**€5 gift cards voor heel veel shops! (o.a. zalando, myjewellery) Zie link in bio";
+  giftCardBottomLineValue = "**€7.50 gift cards voor heel veel shops! (o.a. zalando, myjewellery) Zie link in bio";
   isEditing: boolean = false;
   rowToDelete: number = 0;
   selectedRowToChangeColour: number;
