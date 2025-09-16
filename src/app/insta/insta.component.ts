@@ -48,7 +48,7 @@ export class InstaComponent {
   };
 
   showExtraBottomLine = true;
-  extraBottomLineValue = "*download Temu app via link in bio en ontvang €200 shoptegoed en 30% korting";
+  extraBottomLineValue = "*download Temu app via link in bio en ontvang €100 shoptegoed en 30% korting";
   giftCardBottomLineValue = "**€7.50 gift cards voor heel veel shops! (o.a. zalando, myjewellery) Zie link in bio";
   isEditing: boolean = false;
   rowToDelete: number = 0;
@@ -78,7 +78,7 @@ export class InstaComponent {
 
       var desiredTiktokTableHeight = ((tableWidth / 9) * 16);
       this.tableHeight = desiredTiktokTableHeight;
-      this.extraBottomLineValue = "*download Temu app via link in bio voor €200 shoptegoed en 30% off";
+      this.extraBottomLineValue = "*download Temu app via link in bio voor €100 shoptegoed en 30% off";
     } else {
       this.tablePaddingLeft = "12px";
       this.tablePaddingTop = "12px";
@@ -86,7 +86,7 @@ export class InstaComponent {
 
       this.tableWidth = 500;
       this.tableHeight = 500;
-      this.extraBottomLineValue = "*download Temu app via link in bio en ontvang €200 shoptegoed en 30% korting";
+      this.extraBottomLineValue = "*download Temu app via link in bio en ontvang €100 shoptegoed en 30% korting";
     }
   }
 
@@ -176,6 +176,7 @@ export class InstaComponent {
         this.sortTable();
         const halfLength = Math.floor(this.instaDiscountEntries.length / 2);
         const oneThirdLength = Math.floor(this.instaDiscountEntries.length / 3);
+        const oneFourthLength = Math.floor(this.instaDiscountEntries.length / 4);
 
         if(this.splitOption === '1') {
             this.instaDiscountEntries = this.instaDiscountEntries.slice(0, halfLength);
@@ -187,6 +188,14 @@ export class InstaComponent {
             this.instaDiscountEntries = this.instaDiscountEntries.slice(oneThirdLength, oneThirdLength * 2);
         } else if (this.splitOption === '3.3') {
             this.instaDiscountEntries = this.instaDiscountEntries.slice(oneThirdLength * 2);
+        } else if (this.splitOption === '4.1') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(0, oneFourthLength);
+        } else if (this.splitOption === '4.2') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFourthLength, oneFourthLength * 2);
+        } else if (this.splitOption === '4.3') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFourthLength * 2, oneFourthLength * 3);
+        } else if (this.splitOption === '4.4') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFourthLength * 3);
         }
       }
     });
