@@ -2,13 +2,15 @@ const fs = require('fs');
 const path = require('path');
 
 function getMissingCompanies() {
-    const affDummyJsonPath = path.join(__dirname, '../../../src/assets/aff_dummy.json');
-    const affDummyJson = JSON.parse(fs.readFileSync(affDummyJsonPath, 'utf-8'));
+    const affLinkServicePath = '/Users/LennartMac/Documents/Projects/light19/src/app/services/affiliate-link.service.ts';
+    const affLinkServiceContent = fs.readFileSync(affLinkServicePath, 'utf-8');
+
+    const match = affLinkServiceContent.match(/affiliateLinks[^=]*=\s*({[\s\S]*?});/);
+    const affiliateLinks = eval(`(${match[1]})`);
+    const companiesInAffiliateLinks = Object.keys(affiliateLinks);
 
     const discountsPath = path.join(__dirname, '../../../src/assets/discounts_wlscks.json');
     const discountsJson = JSON.parse(fs.readFileSync(discountsPath, 'utf-8'));
-
-    const companiesInDummy = Object.keys(affDummyJson);
 
     const companiesInDiscounts = discountsJson.map(line => {
         let name = line.split(",")[0].trim().toLowerCase();
@@ -17,7 +19,7 @@ function getMissingCompanies() {
     });
 
     const companiesInDiscountsSet = new Set(companiesInDiscounts);
-    const missingNames = companiesInDummy.filter(name => !companiesInDiscountsSet.has(name.toLowerCase()));
+    const missingNames = companiesInAffiliateLinks.filter(name => !companiesInDiscountsSet.has(name.toLowerCase()));
 
     return new Set(missingNames);
 }
