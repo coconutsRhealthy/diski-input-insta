@@ -1,16 +1,23 @@
 const fs = require('fs');
 const path = require('path');
 
-const affDummyJsonPath = path.join(__dirname, '../../../src/assets/aff_dummy.json');
-const affDummyJson = JSON.parse(fs.readFileSync(affDummyJsonPath, 'utf-8'));
+const affLinkServicePath = '/Users/LennartMac/Documents/Projects/light19/src/app/services/affiliate-link.service.ts';
 
 function getDiscountCode(companyName) {
+    const affLinkServiceContent = fs.readFileSync(affLinkServicePath, 'utf-8');
+    const match = affLinkServiceContent.match(/affiliateLinks[^=]*=\s*({[\s\S]*?});/);
+
+    if (!match) {
+      throw new Error('Could not find affiliateLinks object in affiliate-link.service.ts');
+    }
+
+    const affiliateLinks = eval(`(${match[1]})`);
     const lowerName = companyName.toLowerCase();
 
-    for (const [key, code] of Object.entries(affDummyJson)) {
-        if (key.toLowerCase() === lowerName) {
-            return code;
-        }
+    for (const [key, value] of Object.entries(affiliateLinks)) {
+      if (key.toLowerCase() === lowerName) {
+        return value.dummyCode;
+      }
     }
 
     console.warn(`Geen kortingscode gevonden voor bedrijf: "${companyName}"`);

@@ -6,6 +6,11 @@ function getMissingCompanies() {
     const affLinkServiceContent = fs.readFileSync(affLinkServicePath, 'utf-8');
 
     const match = affLinkServiceContent.match(/affiliateLinks[^=]*=\s*({[\s\S]*?});/);
+
+    if (!match) {
+      throw new Error('Could not find affiliateLinks object in affiliate-link.service.ts');
+    }
+
     const affiliateLinks = eval(`(${match[1]})`);
     const companiesInAffiliateLinks = Object.keys(affiliateLinks);
 

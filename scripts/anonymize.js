@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const inputFile = path.join(__dirname, '../src/assets/discounts_wlscks.json');
+const inputFile = path.join(__dirname, '../src/assets/discounts_dummy.json');
 const outputFile = path.join(__dirname, '../src/assets/discounts_anon.json');
 
 fs.readFile(inputFile, 'utf8', (err, data) => {
