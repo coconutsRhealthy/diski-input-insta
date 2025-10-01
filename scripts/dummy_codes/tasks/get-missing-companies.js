@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function getMissingCompanies() {
+function getMissingCompanies(discountsPath) {
     const affLinkServicePath = '/Users/LennartMac/Documents/Projects/light19/src/app/services/affiliate-link.service.ts';
     const affLinkServiceContent = fs.readFileSync(affLinkServicePath, 'utf-8');
 
@@ -14,7 +14,10 @@ function getMissingCompanies() {
     const affiliateLinks = eval(`(${match[1]})`);
     const companiesInAffiliateLinks = Object.keys(affiliateLinks);
 
-    const discountsPath = path.join(__dirname, '../../../src/assets/discounts_wlscks.json');
+    if (!fs.existsSync(discountsPath)) {
+        throw new Error(`Discounts file not found at: ${discountsPath}`);
+    }
+
     const discountsJson = JSON.parse(fs.readFileSync(discountsPath, 'utf-8'));
 
     const companiesInDiscounts = discountsJson.map(line => {
@@ -34,6 +37,6 @@ module.exports = getMissingCompanies;
 // test-run
 if (require.main === module) {
     console.log("Running standalone...");
-    const missing = getMissingCompanies();
+    const missing = getMissingCompanies(path.join(__dirname, '../../../src/assets/discounts_anon.json'));
     console.log("Missing companies:", [...missing]);
 }
