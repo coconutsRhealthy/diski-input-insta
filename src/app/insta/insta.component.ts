@@ -177,6 +177,7 @@ export class InstaComponent {
         const halfLength = Math.floor(this.instaDiscountEntries.length / 2);
         const oneThirdLength = Math.floor(this.instaDiscountEntries.length / 3);
         const oneFourthLength = Math.floor(this.instaDiscountEntries.length / 4);
+        const oneFifthLength = Math.floor(this.instaDiscountEntries.length / 5);
 
         if(this.splitOption === '1') {
             this.instaDiscountEntries = this.instaDiscountEntries.slice(0, halfLength);
@@ -196,6 +197,16 @@ export class InstaComponent {
           this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFourthLength * 2, oneFourthLength * 3);
         } else if (this.splitOption === '4.4') {
           this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFourthLength * 3);
+        } else if (this.splitOption === '5.1') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(0, oneFifthLength);
+        } else if (this.splitOption === '5.2') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFifthLength, oneFifthLength * 2);
+        } else if (this.splitOption === '5.3') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFifthLength * 2, oneFifthLength * 3);
+        } else if (this.splitOption === '5.4') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFifthLength * 3, oneFifthLength * 4);
+        } else if (this.splitOption === '5.5') {
+          this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFifthLength * 4);
         }
       }
     });
