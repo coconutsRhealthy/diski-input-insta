@@ -2,6 +2,9 @@ const fs = require("fs");
 const path = require("path");
 
 function main(maxPerWebshop = 1) {
+    const INDENT = "\t";
+    console.log("\n\n");
+
     const filename = path.join(__dirname, "discounts-for-script.json");
 
     // JSON bestand inlezen
@@ -44,8 +47,8 @@ function main(maxPerWebshop = 1) {
         `${"WEBSHOP".padEnd(SHOP_WIDTH)} ${"CODE".padEnd(CODE_WIDTH)}` +
         SEPARATOR +
         `${"WEBSHOP".padEnd(SHOP_WIDTH)} ${"CODE".padEnd(CODE_WIDTH)}`;
-    console.log(header);
-    console.log("-".repeat(SHOP_WIDTH + CODE_WIDTH + SEPARATOR.length + SHOP_WIDTH + CODE_WIDTH));
+    console.log(INDENT + header);
+    console.log(INDENT + "-".repeat(SHOP_WIDTH + CODE_WIDTH + SEPARATOR.length + SHOP_WIDTH + CODE_WIDTH));
 
     // Printen
     for (let i = 0; i < mid; i++) {
@@ -55,9 +58,10 @@ function main(maxPerWebshop = 1) {
         const leftText = `${left[0].padEnd(SHOP_WIDTH)} ${left[1].padEnd(CODE_WIDTH)}`;
         const rightText = `${right[0].padEnd(SHOP_WIDTH)} ${right[1].padEnd(CODE_WIDTH)}`;
 
-        console.log(`${leftText}${SEPARATOR}${rightText}`);
+        console.log(INDENT + `${leftText}${SEPARATOR}${rightText}`);
     }
+
+    console.log("\n\n");
 }
 
-// Hier stel je in hoeveel regels per webshop je wilt
-main(40); // voorbeeld: 2 regels per webshop
+main(30);
