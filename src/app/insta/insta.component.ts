@@ -19,7 +19,10 @@ export class InstaComponent {
   tableRowHeight = 0.0004;
   tableRowLineHeight = 0.0004;
   tableRowMinHeight = 0.0004;
-  tableLineAndFontColor = "brown";
+  //tableLineAndFontColor = "#E0E0E0";
+  //tableLineAndFontColor = "#00BFFF";
+  //tableLineAndFontColor = "#B3E9FF";
+  tableLineAndFontColor = "#4B0082";
   tableBackgroundColor = "green";
   kortingDate = "1 jan";
   kortingDateFontSize = 10;
@@ -50,6 +53,7 @@ export class InstaComponent {
   showExtraBottomLine = true;
   extraBottomLineValue = "*download Temu app via link in bio en ontvang €100 shoptegoed en 30% korting";
   giftCardBottomLineValue = "**€7.50 gift cards voor heel veel shops! (o.a. zalando, myjewellery) Zie link in bio";
+  //giftCardBottomLineValue = "Promoot Diski.nl en verdien geld! Zie link in bio";
   isEditing: boolean = false;
   rowToDelete: number = 0;
   selectedRowToChangeColour: number;
@@ -178,6 +182,7 @@ export class InstaComponent {
         const oneThirdLength = Math.floor(this.instaDiscountEntries.length / 3);
         const oneFourthLength = Math.floor(this.instaDiscountEntries.length / 4);
         const oneFifthLength = Math.floor(this.instaDiscountEntries.length / 5);
+        const oneSixthLength = Math.floor(this.instaDiscountEntries.length / 6);
 
         if(this.splitOption === '1') {
             this.instaDiscountEntries = this.instaDiscountEntries.slice(0, halfLength);
@@ -207,6 +212,20 @@ export class InstaComponent {
           this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFifthLength * 3, oneFifthLength * 4);
         } else if (this.splitOption === '5.5') {
           this.instaDiscountEntries = this.instaDiscountEntries.slice(oneFifthLength * 4);
+        }
+        // **Nieuwe 6-splitsing**
+        else if (this.splitOption === '6.1') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(0, oneSixthLength);
+        } else if (this.splitOption === '6.2') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(oneSixthLength, oneSixthLength * 2);
+        } else if (this.splitOption === '6.3') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(oneSixthLength * 2, oneSixthLength * 3);
+        } else if (this.splitOption === '6.4') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(oneSixthLength * 3, oneSixthLength * 4);
+        } else if (this.splitOption === '6.5') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(oneSixthLength * 4, oneSixthLength * 5);
+        } else if (this.splitOption === '6.6') {
+            this.instaDiscountEntries = this.instaDiscountEntries.slice(oneSixthLength * 5);
         }
       }
     });
