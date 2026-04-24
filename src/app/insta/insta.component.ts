@@ -1,6 +1,6 @@
 import html2canvas from 'html2canvas';
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { DiscountsService } from '../services/discounts.service';
 
@@ -11,7 +11,7 @@ import {firstBy} from "thenby";
   templateUrl: './insta.component.html',
   styleUrls: ['./insta.component.css']
 })
-export class InstaComponent {
+export class InstaComponent implements OnInit {
 
   tableHeight = 500;
   tableWidth = 500;
@@ -64,6 +64,68 @@ export class InstaComponent {
   splitOption;
 
   constructor(private discountsService: DiscountsService) { }
+
+    ngOnInit(): void {
+      this.discountsService.getDiscounts().subscribe((data) => {
+            var baseData = [];
+
+            data.forEach((line: string) => {
+              baseData.push(line);
+            });
+
+            this.instaDiscountEntries = [];
+            var baseKortingEntries = [];
+
+            for(var i = 0; i < baseData.length; i++) {
+              baseKortingEntries.push(baseData[i]);
+            }
+
+            baseKortingEntries.reverse();
+            var startDate = this.getDateFromDateString("04-24");
+
+            for(var i = 0; i < baseKortingEntries.length; i++) {
+              var dateString = this.getDateFromBaseInputLine(baseKortingEntries[i]);
+              var date = this.getDateFromDateString(dateString);
+
+              if(date >= startDate) {
+                this.instaDiscountEntries.push({
+                   "company": this.getCompanyFromBaseInputLine(baseKortingEntries[i]),
+                   "code": this.getDiscountCodeFromBaseInputLine(baseKortingEntries[i]),
+                   "via": this.getInfluencerFromBaseInputLine(baseKortingEntries[i]),
+                   "percentage": this.getDiscountPercentageFromBaseInputLine(baseKortingEntries[i]),
+                   "tracker": i,
+                   });
+              }
+            }
+
+                  this.instaDiscountEntries.sort((a, b) =>
+                    a.company.localeCompare(b.company)
+                  );
+
+                      this.instaDiscountEntries =
+                        this.reorderForThreeColumns(this.instaDiscountEntries);
+          });
+
+
+    }
+
+  reorderForThreeColumns(data: any[]) {
+    const columns = 3;
+    const rows = Math.ceil(data.length / columns);
+
+    const reordered = [];
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < columns; c++) {
+        const index = c * rows + r;
+        if (index < data.length) {
+          reordered.push(data[index]);
+        }
+      }
+    }
+
+    return reordered;
+  }
 
   setTableBackgroundColour(hex) {
     this.tableBackgroundColor = hex;

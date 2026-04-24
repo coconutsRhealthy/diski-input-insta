@@ -2,8 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 function main(maxPerWebshop = 1) {
-    const INDENT = "\t";
-    console.log("\n\n");
+    console.log("\n");
 
     const filename = path.join(__dirname, "discounts-for-script.json");
 
@@ -20,48 +19,29 @@ function main(maxPerWebshop = 1) {
         if (!grouped[webshop]) {
             grouped[webshop] = [];
         }
-        grouped[webshop].push([webshop, code]);
+
+        grouped[webshop].push(code);
     });
 
-    // Maximaal aantal regels per webshop
+    // Verzamelen met maxPerWebshop
     const rows = [];
-    Object.values(grouped).forEach(items => {
-        rows.push(...items.slice(0, maxPerWebshop));
+    Object.entries(grouped).forEach(([webshop, codes]) => {
+        codes.slice(0, maxPerWebshop).forEach(code => {
+            rows.push([webshop, code]);
+        });
     });
 
     // Alfabetisch sorteren
-    rows.sort((a, b) => a[0].toLowerCase().localeCompare(b[0].toLowerCase()));
+    rows.sort((a, b) =>
+        a[0].toLowerCase().localeCompare(b[0].toLowerCase())
+    );
 
-    // Splitsen in twee kolommen
-    const mid = Math.ceil(rows.length / 2);
-    const leftCol = rows.slice(0, mid);
-    const rightCol = rows.slice(mid);
+    // Printen als: shopnaam - code
+    rows.forEach(([webshop, code]) => {
+        console.log(`${webshop} - ${code}`);
+    });
 
-    // Breedtes instellen
-    const SHOP_WIDTH = 24;
-    const CODE_WIDTH = 17;
-    const SEPARATOR = " | ";
-
-    // Header
-    const header =
-        `${"WEBSHOP".padEnd(SHOP_WIDTH)} ${"CODE".padEnd(CODE_WIDTH)}` +
-        SEPARATOR +
-        `${"WEBSHOP".padEnd(SHOP_WIDTH)} ${"CODE".padEnd(CODE_WIDTH)}`;
-    console.log(INDENT + header);
-    console.log(INDENT + "-".repeat(SHOP_WIDTH + CODE_WIDTH + SEPARATOR.length + SHOP_WIDTH + CODE_WIDTH));
-
-    // Printen
-    for (let i = 0; i < mid; i++) {
-        const left = leftCol[i];
-        const right = i < rightCol.length ? rightCol[i] : ["", ""];
-
-        const leftText = `${left[0].padEnd(SHOP_WIDTH)} ${left[1].padEnd(CODE_WIDTH)}`;
-        const rightText = `${right[0].padEnd(SHOP_WIDTH)} ${right[1].padEnd(CODE_WIDTH)}`;
-
-        console.log(INDENT + `${leftText}${SEPARATOR}${rightText}`);
-    }
-
-    console.log("\n\n");
+    console.log("\n");
 }
 
 main(30);

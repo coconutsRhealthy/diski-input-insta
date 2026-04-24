@@ -40,7 +40,7 @@ function main(maxPerWebshop = 1) {
         a[0].toLowerCase().localeCompare(b[0].toLowerCase())
     );
 
-    const MAX_CHARS = 400;
+    const MAX_CHARS = 470;
     const today = getTodayLabel();
 
     // ---- CHUNK LOGICA (gelijkmatig + geen restchunk) ----
