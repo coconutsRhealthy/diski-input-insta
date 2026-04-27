@@ -1,10 +1,30 @@
 <div class="page">
-  <div class="discount-card" id="insta-table">
+
+  <div class="controls">
+    <label>
+      Columns
+      <input type="number" min="1" max="12" [(ngModel)]="columnCount" (change)="rebuildLayout()" />
+    </label>
+    <label>
+      Max per company
+      <input type="number" min="1" max="20" [(ngModel)]="maxEntriesPerCompany" (change)="rebuildLayout()" />
+    </label>
+    <label class="toggle">
+      <input type="checkbox" [(ngModel)]="compactMode" />
+      Compact
+    </label>
+    <span class="count">{{ instaDiscountEntries.length }} entries</span>
+  </div>
+
+  <div class="discount-card"
+       id="insta-table"
+       [class.compact]="compactMode"
+       [style.--col-count]="columnCount">
 
     <div class="discount-grid">
       <div class="discount-item" *ngFor="let entry of instaDiscountEntries">
         <span class="shop">{{ entry.company }}</span>
-        <span class="dash">-</span>
+        <span class="dash">·</span>
         <span class="code">{{ entry.code }}</span>
       </div>
     </div>

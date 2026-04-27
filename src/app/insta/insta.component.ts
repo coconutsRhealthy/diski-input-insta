@@ -36,6 +36,11 @@ export class InstaComponent implements OnInit {
   tablePaddingTop = "12px";
   tablePaddingRight = "12px";
 
+  // Layout controls for the Instagram post
+  columnCount = 3;                // how many columns to render
+  maxEntriesPerCompany = 2;       // max codes shown per company
+  compactMode = false;            // tighter spacing/fonts for lots of entries
+
   instaDiscountEntries = [];
 
   aspectRatio = "-1";
@@ -81,7 +86,7 @@ export class InstaComponent implements OnInit {
             }
 
             baseKortingEntries.reverse();
-            var startDate = this.getDateFromDateString("04-24");
+            var startDate = this.getDateFromDateString("04-27");
 
             for(var i = 0; i < baseKortingEntries.length; i++) {
               var dateString = this.getDateFromBaseInputLine(baseKortingEntries[i]);
@@ -103,20 +108,37 @@ export class InstaComponent implements OnInit {
                   );
 
                       this.instaDiscountEntries =
-                        this.reorderForThreeColumns(this.instaDiscountEntries);
+                        this.limitEntriesPerCompany(this.instaDiscountEntries, this.maxEntriesPerCompany);
+
+                      this.instaDiscountEntries =
+                        this.reorderForColumns(this.instaDiscountEntries, this.columnCount);
           });
 
 
     }
 
-  reorderForThreeColumns(data: any[]) {
-    const columns = 3;
-    const rows = Math.ceil(data.length / columns);
+  limitEntriesPerCompany(data: any[], maxPerCompany: number) {
+    if (!maxPerCompany || maxPerCompany < 1) return data;
+    const counts: { [key: string]: number } = {};
+    const limited = [];
+    for (const entry of data) {
+      const key = (entry.company || '').toLowerCase();
+      counts[key] = (counts[key] || 0) + 1;
+      if (counts[key] <= maxPerCompany) {
+        limited.push(entry);
+      }
+    }
+    return limited;
+  }
+
+  reorderForColumns(data: any[], columns: number) {
+    const cols = Math.max(1, columns);
+    const rows = Math.ceil(data.length / cols);
 
     const reordered = [];
 
     for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < columns; c++) {
+      for (let c = 0; c < cols; c++) {
         const index = c * rows + r;
         if (index < data.length) {
           reordered.push(data[index]);
@@ -394,6 +416,37 @@ export class InstaComponent implements OnInit {
     } else {
       alert('Invalid row number');
     }
+  }
+
+  rebuildLayout() {
+    // Re-run the filter + reorder pipeline on the already-loaded data.
+    // We re-fetch from the service because limit/reorder mutate the array order.
+    this.discountsService.getDiscounts().subscribe((data) => {
+      const baseData: string[] = [];
+      data.forEach((line: string) => baseData.push(line));
+
+      const baseKortingEntries = [...baseData].reverse();
+      const startDate = this.getDateFromDateString("04-24");
+
+      const entries = [];
+      for (let i = 0; i < baseKortingEntries.length; i++) {
+        const dateString = this.getDateFromBaseInputLine(baseKortingEntries[i]);
+        const date = this.getDateFromDateString(dateString);
+        if (date >= startDate) {
+          entries.push({
+            "company": this.getCompanyFromBaseInputLine(baseKortingEntries[i]),
+            "code": this.getDiscountCodeFromBaseInputLine(baseKortingEntries[i]),
+            "via": this.getInfluencerFromBaseInputLine(baseKortingEntries[i]),
+            "percentage": this.getDiscountPercentageFromBaseInputLine(baseKortingEntries[i]),
+            "tracker": i,
+          });
+        }
+      }
+
+      entries.sort((a, b) => a.company.localeCompare(b.company));
+      const limited = this.limitEntriesPerCompany(entries, this.maxEntriesPerCompany);
+      this.instaDiscountEntries = this.reorderForColumns(limited, this.columnCount);
+    });
   }
 
   changeRowBackgroundColor() {
