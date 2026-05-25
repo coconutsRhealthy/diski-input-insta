@@ -1,0 +1,88 @@
+<div class="page">
+
+  <div class="controls">
+    <label>
+      Vanaf datum (MM-DD)
+      <input type="text" [(ngModel)]="startDate" (change)="loadAndBuild()" placeholder="01-01" />
+    </label>
+    <label>
+      Datum op slide (MM-DD)
+      <input type="text" [(ngModel)]="postDate" placeholder="05-22" />
+    </label>
+    <label>
+      Regels per slide
+      <input type="number" min="1" max="60" [(ngModel)]="linesPerPage" (change)="buildPages()" />
+    </label>
+    <label>
+      Kolommen per slide
+      <input type="number" min="1" max="4" [(ngModel)]="columnsPerSlide" (change)="buildPages()" />
+    </label>
+    <label>
+      Verhouding
+      <select [(ngModel)]="aspectRatio">
+        <option value="4:5">4:5 (Instagram portret)</option>
+        <option value="3:4">3:4</option>
+        <option value="1:1">1:1 (vierkant)</option>
+      </select>
+    </label>
+    <label>
+      Tekstgrootte
+      <input type="number" min="12" max="48" [(ngModel)]="bodyFontSize" />
+    </label>
+    <label>
+      Preview zoom
+      <input type="number" min="0.1" max="1" step="0.05" [(ngModel)]="previewScale" />
+    </label>
+    <button class="primary" (click)="exportAll()">Download alle slides</button>
+    <span class="count">{{ allEntries.length }} codes · {{ pages.length }} slides</span>
+  </div>
+
+  <div class="slides">
+    <div class="slide-unit" *ngFor="let page of pages; let i = index">
+
+      <div class="slide-frame"
+           [style.width.px]="slideWidth * previewScale"
+           [style.height.px]="slideHeight * previewScale">
+        <div class="slide-scale" [style.transform]="'scale(' + previewScale + ')'">
+
+          <div class="carousel-slide"
+               id="carousel-slide-{{ i }}"
+               [style.width.px]="slideWidth"
+               [style.height.px]="slideHeight">
+
+            <div class="slide-header">
+              <div class="brand">
+                <span class="brand-title">{{ headerTitle }}</span>
+                <span class="brand-date" *ngIf="dutchDate">{{ dutchDate }}</span>
+                <span class="brand-sub">{{ headerSubtitle }}</span>
+              </div>
+              <span class="page-badge">{{ i + 1 }} / {{ pages.length }}</span>
+            </div>
+
+            <div class="cc-grid"
+                 [style.grid-template-columns]="'repeat(' + columnsPerSlide + ', 1fr)'"
+                 [style.fontSize.px]="bodyFontSize">
+              <div class="cc-item" *ngFor="let entry of page; trackBy: trackByTracker">
+                <span class="cc-shop">{{ entry.company }}</span>
+                <span class="cc-leader"></span>
+                <span class="cc-code">{{ entry.code }}</span>
+                <span class="cc-pct" *ngIf="entry.percentage">{{ entry.percentage }}</span>
+              </div>
+            </div>
+
+            <div class="slide-footer">{{ footerNote }}</div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="slide-actions">
+        <span>Slide {{ i + 1 }}</span>
+        <button (click)="exportSlide(i)">Download</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

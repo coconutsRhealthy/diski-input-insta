@@ -1,0 +1,218 @@
+.page{
+  padding: 32px;
+  background: #fafafa;
+  min-height: 100vh;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---- Controls bar ---------------------------------------------------- */
+.controls{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: flex-end;
+  margin-bottom: 24px;
+  padding: 14px 18px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  font-size: 13px;
+  color: #555;
+}
+
+.controls label{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.controls input,
+.controls select{
+  padding: 5px 8px;
+  border: 1px solid #e0dce4;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.controls input[type="number"]{ width: 80px; }
+.controls input[type="text"]{ width: 120px; }
+
+.controls button{
+  padding: 7px 14px;
+  border: 1px solid #4B0082;
+  background: white;
+  color: #4B0082;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.controls button.primary{
+  background: #4B0082;
+  color: white;
+}
+
+.controls button:hover{ opacity: 0.85; }
+
+.controls .count{
+  margin-left: auto;
+  color: #999;
+  font-size: 12px;
+}
+
+/* ---- Slides overview ------------------------------------------------- */
+.slides{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.slide-unit{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* .slide-frame reserves the *scaled* footprint so slides don't overlap. */
+.slide-frame{
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 12px 34px rgba(75, 0, 130, 0.14);
+}
+
+.slide-scale{
+  transform-origin: top left;
+}
+
+.slide-actions{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #888;
+}
+
+.slide-actions button{
+  padding: 5px 12px;
+  border: 1px solid #4B0082;
+  background: white;
+  color: #4B0082;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.slide-actions button:hover{ background: #4B0082; color: white; }
+
+/* ---- The exported slide itself (design pixels) ---------------------- */
+.carousel-slide{
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 64px 70px 56px;
+  background: linear-gradient(150deg, #faf5fb 0%, #f1e9f5 55%, #e9dff0 100%);
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  overflow: hidden;
+}
+
+.slide-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 36px;
+}
+
+.brand{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.brand-title{
+  font-size: 58px;
+  font-weight: 800;
+  color: #4B0082;
+  letter-spacing: -1px;
+}
+
+.brand-date{
+  font-size: 34px;
+  font-weight: 700;
+  color: #ff4fa3;
+  text-transform: lowercase;
+}
+
+.brand-sub{
+  font-size: 30px;
+  font-weight: 600;
+  color: #9a8aa6;
+}
+
+.page-badge{
+  font-size: 30px;
+  font-weight: 700;
+  color: #4B0082;
+  background: rgba(75, 0, 130, 0.08);
+  padding: 10px 22px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.cc-grid{
+  flex: 1;
+  display: grid;
+  align-content: start;
+  column-gap: 56px;
+  row-gap: 0;
+  overflow: hidden;
+}
+
+.cc-item{
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 3px 0;
+  line-height: 1.25;
+}
+
+.cc-shop{
+  font-weight: 700;
+  color: #3a3a3a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.cc-leader{
+  flex: 1;
+  min-width: 18px;
+  border-bottom: 2px dotted #d4c8df;
+  transform: translateY(-0.18em);
+}
+
+.cc-code{
+  font-weight: 800;
+  color: #ff4fa3;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+.cc-pct{
+  font-weight: 600;
+  color: #8a7b96;
+  white-space: nowrap;
+  font-size: 0.78em;
+}
+
+.slide-footer{
+  margin-top: 32px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  color: #9a8aa6;
+}

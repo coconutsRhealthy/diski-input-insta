@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { InputComponent } from './input-page/input-page.component';
 import { InstaComponent } from './insta/insta.component';
+import { InstaCarouselComponent } from './insta-carousel/insta-carousel.component';
 
 const routes: Routes = [
     {
@@ -17,6 +18,10 @@ const routes: Routes = [
     {
       path: 'insta',
       component: InstaComponent
+    },
+    {
+      path: 'insta-carousel',
+      component: InstaCarouselComponent
     }
 ]
 
@@ -24,6 +29,7 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     InstaComponent,
+    InstaCarouselComponent,
     InputComponent
   ],
   imports: [
